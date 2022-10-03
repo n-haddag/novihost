@@ -1,0 +1,16 @@
+CP=$(grep -a license_expire_time /usr/local/cpanel/cpanel.lisc | awk {'print $2'})
+SE=$(date +%s)
+let DIF=$CP-$SE
+let DAY=$DIF/86400
+if [ $DAY -gt 15 ]; then
+echo “OK: cPanel License expires on ${CP}”
+exit 0
+elif [ $DAY -gt 5 ]; then
+echo “WARNING: cPanel License expires on $(date -d@${CP})”
+exit 1
+elif [ $DAY -ge 1 ]; then
+echo “CRITICAL: cPanel License expires on $(date -d@${CP})”
+exit 2
+else echo “CRITICAL: cPanel Licence expired on $(date -d@${CP})”
+exit 2
+fi
